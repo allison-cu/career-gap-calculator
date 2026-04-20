@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Career Gap Calculator | Potentiate OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px}
+  body{
+    background-color:#1a4542;
+    color:#f6f5f1;
+    font-family:'Inter',sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    min-height:100vh;
+    padding:48px 20px 64px;
+  }
+
+  .page-wrap{max-width:720px;margin:0 auto}
+
+  /* Logo */
+  .logo-wrap{display:flex;justify-content:center;margin-bottom:48px}
+  .logo-svg{width:240px;height:auto}
+
+  /* Page header */
+  .page-header{margin-bottom:40px}
+  .page-title{
+    font-family:'Playfair Display',serif;
+    font-size:28px;
+    font-weight:700;
+    color:#f6f5f1;
+    margin-bottom:8px;
+    line-height:1.2;
+  }
+  .page-sub{font-size:15px;color:rgba(246,245,241,0.70);line-height:1.6}
+
+  /* Section headers */
+  .sh{
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+    color:rgba(246,245,241,0.55);
+    margin-bottom:12px;
+  }
+
+  /* Form */
+  .sec{margin-bottom:28px}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+  .g2-last{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .field{display:flex;flex-direction:column;gap:5px}
+  label{font-size:13px;color:rgba(246,245,241,0.75)}
+  label span{font-size:11px;color:rgba(246,245,241,0.45)}
+
+  input[type="number"],select{
+    width:100%;
+    padding:10px 14px;
+    background:rgba(246,245,241,0.08);
+    border:.5px solid rgba(246,245,241,0.20);
+    border-radius:8px;
+    color:#f6f5f1;
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    outline:none;
+    transition:border-color .2s;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  input[type="number"]:focus,select:focus{border-color:rgba(246,245,241,0.55)}
+  input[type="number"]::placeholder{color:rgba(246,245,241,0.30)}
+  select option{background:#1a4542;color:#f6f5f1}
+
+  /* Button */
+  .cbtn{
+    width:100%;
+    padding:14px;
+    background:#f6f5f1;
+    color:#1a4542;
+    border:none;
+    border-radius:8px;
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    font-weight:500;
+    cursor:pointer;
+    margin-top:4px;
+    transition:opacity .2s;
+  }
+  .cbtn:hover{opacity:.90}
+  .cbtn:active{opacity:.80}
+
+  .err{font-size:13px;color:#e8a090;margin-top:10px;display:none}
+
+  /* Divider */
+  hr.d{border:none;border-top:.5px solid rgba(246,245,241,0.15);margin:32px 0}
+
+  /* Result cards */
+  .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
+  .g2b{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+  .mc{
+    background:rgba(246,245,241,0.07);
+    border:.5px solid rgba(246,245,241,0.12);
+    border-radius:10px;
+    padding:16px;
+  }
+  .ml{
+    font-size:12px;
+    color:rgba(246,245,241,0.60);
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+    line-height:1.3;
+  }
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    font-size:10px;
+    font-weight:500;
+    color:rgba(246,245,241,0.55);
+    background:rgba(246,245,241,0.10);
+    border-radius:4px;
+    padding:2px 7px;
+    white-space:nowrap;
+  }
+  .mv{font-size:22px;font-weight:500;color:#f6f5f1;margin:0}
+  .mv-gap{font-size:22px;font-weight:500;color:#e8a090;margin:0}
+  .mv-wait{font-size:20px;font-weight:500;color:#e8a090;margin:0}
+  .ms{font-size:11px;color:rgba(246,245,241,0.40);margin-top:4px}
+  .rrow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
+  .rl{font-size:12px;color:rgba(246,245,241,0.50)}
+  .rm{font-size:22px;font-weight:500;color:#f6f5f1}
+  .rh{font-size:12px;color:rgba(246,245,241,0.50)}
+  .rlbl{
+    font-size:10px;
+    color:rgba(246,245,241,0.35);
+    display:flex;
+    justify-content:space-between;
+  }
+
+  /* Note blocks */
+  .nb{
+    font-size:13px;
+    color:rgba(246,245,241,0.65);
+    line-height:1.7;
+    padding:14px 16px;
+    background:rgba(246,245,241,0.05);
+    border:.5px solid rgba(246,245,241,0.10);
+    border-radius:10px;
+    margin-bottom:10px;
+  }
+  .nb strong{color:#f6f5f1;font-weight:500}
+  .nb em{color:rgba(246,245,241,0.40);font-style:normal;font-size:11px}
+  .nb p{margin-bottom:10px}
+  .nb p:last-child{margin-bottom:0}
+
+  /* Receipt */
+  .receipt{
+    background:rgba(246,245,241,0.05);
+    border:.5px solid rgba(246,245,241,0.12);
+    border-radius:10px;
+    padding:18px;
+    margin-bottom:12px;
+  }
+  .receipt-title{
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+    color:rgba(246,245,241,0.45);
+    margin-bottom:14px;
+  }
+  .receipt-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding:9px 0;
+    border-bottom:.5px solid rgba(246,245,241,0.08);
+  }
+  .receipt-row:last-child{border-bottom:none}
+  .receipt-label{font-size:13px;color:rgba(246,245,241,0.70)}
+  .receipt-value{
+    font-size:13px;
+    font-weight:500;
+    color:#f6f5f1;
+    text-align:right;
+    min-width:130px;
+    padding-left:12px;
+  }
+  .receipt-sub{font-size:11px;color:rgba(246,245,241,0.35);margin-top:2px;line-height:1.4}
+  .receipt-total-label{font-size:15px;font-weight:500;color:#f6f5f1}
+  .receipt-total-value{
+    font-size:17px;
+    font-weight:500;
+    color:#f6f5f1;
+    text-align:right;
+    min-width:130px;
+    padding-left:12px;
+  }
+  .total-row{
+    border-top:.5px solid rgba(246,245,241,0.18) !important;
+    margin-top:6px;
+    padding-top:14px !important;
+  }
+
+  /* Output section */
+  .out{display:none;margin-top:8px}
+  .out.show{display:block}
+
+  /* Footer */
+  .footer{
+    margin-top:40px;
+    padding-top:24px;
+    border-top:.5px solid rgba(246,245,241,0.10);
+    font-size:11px;
+    color:rgba(246,245,241,0.30);
+    line-height:1.8;
+    text-align:center;
+  }
+
+  /* Responsive */
+  @media(max-width:540px){
+    body{padding:32px 16px 48px}
+    .g2,.g2-last,.g2b{grid-template-columns:1fr}
+    .g3{grid-template-columns:1fr}
+    .page-title{font-size:24px}
+    .logo-svg{width:180px}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- Logo -->
+  <div class="logo-wrap">
+    <svg class="logo-svg" viewBox="0 0 480 90" xmlns="http://www.w3.org/2000/svg" aria-label="Potentiate OS">
+      <!-- Chart icon -->
+      <g fill="none" stroke="#f6f5f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="8,72 28,52 48,58 68,38 88,28 108,18"/>
+        <circle cx="8"  cy="72" r="4" fill="#f6f5f1" stroke="none"/>
+        <circle cx="28" cy="52" r="4" fill="#f6f5f1" stroke="none"/>
+        <circle cx="48" cy="58" r="3" fill="#f6f5f1" stroke="none"/>
+        <circle cx="68" cy="38" r="4" fill="#f6f5f1" stroke="none"/>
+        <circle cx="88" cy="28" r="3" fill="#f6f5f1" stroke="none"/>
+        <circle cx="108" cy="18" r="4" fill="#f6f5f1" stroke="none"/>
+        <line x1="20" y1="62" x2="36" y2="62" stroke="rgba(246,245,241,0.35)" stroke-width="1.5"/>
+        <polyline points="20,72 36,58 52,64" stroke="rgba(246,245,241,0.45)" stroke-width="1.8"/>
+        <circle cx="20" cy="72" r="2.5" fill="rgba(246,245,241,0.45)" stroke="none"/>
+        <circle cx="36" cy="58" r="2.5" fill="rgba(246,245,241,0.45)" stroke="none"/>
+        <circle cx="52" cy="64" r="2.5" fill="rgba(246,245,241,0.45)" stroke="none"/>
+      </g>
+      <!-- Divider -->
+      <line x1="126" y1="10" x2="126" y2="80" stroke="#f6f5f1" stroke-width="1.5" opacity="0.80"/>
+      <!-- Wordmark -->
+      <text
+        x="142" y="62"
+        font-family="'Inter', sans-serif"
+        font-weight="300"
+        font-size="32"
+        letter-spacing="6"
+        fill="#f6f5f1"
+      >POTENTIATE OS</text>
+    </svg>
+  </div>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <h1 class="page-title">Career gap calculator</h1>
+    <p class="page-sub">See what staying at your current level is actually costing you.</p>
+    <p style="font-size:12px;color:rgba(246,245,241,0.40);margin-top:8px;line-height:1.5;">All figures shown are gross compensation before taxes, benefits deductions, and other withholdings.</p>
+  </div>
+
+  <!-- Inputs -->
+  <div class="sec">
+    <p class="sh">Your current situation</p>
+    <div class="g2">
+      <div class="field">
+        <label for="inp_base">Current base salary</label>
+        <input type="number" id="inp_base" placeholder="185000" min="0"/>
+      </div>
+      <div class="field">
+        <label for="inp_bonus">Annual bonus <span>(optional — best year)</span></label>
+        <input type="number" id="inp_bonus" placeholder="25000" min="0"/>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="field">
+        <label for="inp_title">Current title</label>
+        <select id="inp_title">
+          <option value="">Select title</option>
+          <option value="director">Director</option>
+          <option value="senior_director">Senior Director</option>
+          <option value="vp">VP of Operations / Supply Chain</option>
+          <option value="svp">SVP</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="inp_yrs_role">Years in current role</label>
+        <input type="number" id="inp_yrs_role" placeholder="4" min="0" max="40"/>
+      </div>
+    </div>
+    <div class="field">
+      <label for="inp_yrs_total">Total years in supply chain and operations</label>
+      <input type="number" id="inp_yrs_total" placeholder="15" min="0" max="50"/>
+    </div>
+  </div>
+
+  <div class="sec">
+    <p class="sh">Company context</p>
+    <div class="g2-last">
+      <div class="field">
+        <label for="inp_rev_current">Current company revenue</label>
+        <select id="inp_rev_current">
+          <option value="">Select range</option>
+          <option value="u100">Under $100M</option>
+          <option value="h500">$100M to $500M</option>
+          <option value="h2b">$500M to $2B</option>
+          <option value="o2b">$2B and above</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="inp_rev_target">Target company revenue</label>
+        <select id="inp_rev_target">
+          <option value="">Select range</option>
+          <option value="u100">Under $100M</option>
+          <option value="h500">$100M to $500M</option>
+          <option value="h2b">$500M to $2B</option>
+          <option value="o2b">$2B and above</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <button class="cbtn" id="calc_btn">Calculate my gap</button>
+  <p class="err" id="err_msg"></p>
+
+  <!-- Output -->
+  <div class="out" id="output_block">
+    <hr class="d"/>
+    <p class="sh" style="margin-bottom:16px">Your results</p>
+
+    <div class="g3">
+      <div class="mc">
+        <p class="ml">Current total comp</p>
+        <p class="mv" id="r_current">—</p>
+        <p class="ms" id="r_current_sub"></p>
+      </div>
+      <div class="mc">
+        <p class="ml">
+          <span id="r_target_label">Target VP range</span>
+          <span class="badge">base salary only</span>
+        </p>
+        <div class="rrow">
+          <span class="rl" id="r_low">—</span>
+          <span class="rm" id="r_mid">—</span>
+          <span class="rh" id="r_high">—</span>
+        </div>
+        <div class="rlbl"><span>low</span><span>midpoint</span><span>high</span></div>
+      </div>
+      <div class="mc">
+        <p class="ml">
+          <span>Annual gap</span>
+          <span class="badge">base salary</span>
+        </p>
+        <p class="mv-gap" id="r_gap">—</p>
+        <p class="ms" id="r_gap_sub"></p>
+      </div>
+    </div>
+
+    <div class="g2b">
+      <div class="mc">
+        <p class="ml">3-year cost of waiting</p>
+        <p class="mv-wait" id="r_3yr">—</p>
+        <p class="ms">Base salary gap only</p>
+      </div>
+      <div class="mc">
+        <p class="ml">5-year cost of waiting</p>
+        <p class="mv-wait" id="r_5yr">—</p>
+        <p class="ms">Base salary gap only</p>
+      </div>
+    </div>
+
+    <div class="nb">
+      <strong>Why base salary only?</strong> Your current bonus is variable and not guaranteed year to year. Base salary is your guaranteed floor — and the number every future raise, offer, and negotiation starts from. The gap calculation above uses base salary only for this reason.
+    </div>
+
+    <hr class="d"/>
+
+    <p class="sh" style="margin-bottom:8px">Total potential compensation at target VP level</p>
+    <p style="font-size:13px;color:rgba(246,245,241,0.55);margin-bottom:18px;line-height:1.6;">Not included in the gap calculation above. This shows the full picture of what the next level looks like.</p>
+
+    <div class="receipt">
+      <p class="receipt-title">Build-up</p>
+
+      <div class="receipt-row">
+        <div style="flex:1">
+          <div class="receipt-label" id="rc_base_label">VP base salary midpoint</div>
+          <div class="receipt-sub">From target range above</div>
+        </div>
+        <div class="receipt-value" id="rc_base_val">—</div>
+      </div>
+
+      <div class="receipt-row">
+        <div style="flex:1">
+          <div class="receipt-label">VP bonus potential</div>
+          <div class="receipt-sub">20% to 40% of base midpoint — variable, not guaranteed</div>
+        </div>
+        <div class="receipt-value" id="rc_bonus_val">—</div>
+      </div>
+
+      <div class="receipt-row">
+        <div style="flex:1">
+          <div class="receipt-label">Equity and stock compensation</div>
+          <div class="receipt-sub" id="rc_equity_sub">Varies by company type and stage</div>
+        </div>
+        <div class="receipt-value" id="rc_equity_val">—</div>
+      </div>
+
+      <div class="receipt-row total-row">
+        <div style="flex:1">
+          <div class="receipt-total-label">Total potential compensation</div>
+          <div class="receipt-sub">Conservative floor to full potential — gross figures</div>
+        </div>
+        <div class="receipt-total-value" id="rc_total_val">—</div>
+      </div>
+      <div style="padding:10px 0 2px;font-size:11px;color:rgba(246,245,241,0.35);line-height:1.5;">All figures are gross. Net take-home will vary based on tax filing status, state, and individual elections.</div>
+
+      <div id="rc_compression_section" style="display:none">
+        <div style="border-top:.5px solid rgba(246,245,241,0.18);margin-top:12px;padding-top:12px">
+          <div style="font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(246,245,241,0.45);margin-bottom:10px">Salary compression impact</div>
+
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:.5px solid rgba(246,245,241,0.08)">
+            <div style="flex:1">
+              <div style="font-size:13px;color:rgba(246,245,241,0.70)">Estimated annual compression shortfall</div>
+              <div style="font-size:11px;color:rgba(246,245,241,0.35);margin-top:2px">2% annual gap — current base with 1.5% raise assumption</div>
+            </div>
+            <div style="font-size:13px;font-weight:500;color:#e8a090;text-align:right;min-width:130px;padding-left:12px" id="rc_comp_annual">—</div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:.5px solid rgba(246,245,241,0.08)">
+            <div style="flex:1">
+              <div style="font-size:13px;color:rgba(246,245,241,0.70)">Cumulative compression to date</div>
+              <div style="font-size:11px;color:rgba(246,245,241,0.35);margin-top:2px" id="rc_comp_yrs_sub">Since year 4</div>
+              <div style="font-size:10px;color:rgba(246,245,241,0.22);margin-top:4px;line-height:1.5;">Estimated using backward salary reconstruction at 1.5% annual raise. 2% annual compression gap applied to each reconstructed year beyond year 4. Conservative estimate — actual compression may be higher.</div>
+            </div>
+            <div style="font-size:13px;font-weight:500;color:#e8a090;text-align:right;min-width:130px;padding-left:12px" id="rc_comp_cumulative">—</div>
+          </div>
+
+          <div style="border-top:.5px solid rgba(246,245,241,0.25);margin-top:8px;padding-top:12px">
+            <div style="font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(246,245,241,0.45);margin-bottom:10px">Combined cost of inaction</div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:.5px solid rgba(246,245,241,0.08)">
+              <div style="font-size:13px;color:rgba(246,245,241,0.70)">VP gap + compression — annual</div>
+              <div style="font-size:13px;font-weight:500;color:#e8a090;text-align:right;min-width:130px;padding-left:12px" id="rc_combined_annual">—</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:.5px solid rgba(246,245,241,0.08)">
+              <div style="font-size:13px;color:rgba(246,245,241,0.70)">Combined 3-year cost</div>
+              <div style="font-size:14px;font-weight:500;color:#e8a090;text-align:right;min-width:130px;padding-left:12px" id="rc_combined_3yr">—</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;padding:8px 0 4px">
+              <div style="font-size:14px;font-weight:500;color:#f6f5f1">Combined 5-year cost</div>
+              <div style="font-size:16px;font-weight:500;color:#e8a090;text-align:right;min-width:130px;padding-left:12px" id="rc_combined_5yr">—</div>
+            </div>
+            <div style="font-size:11px;color:rgba(246,245,241,0.35);margin-top:2px">VP gap cards above show gap only. These include compression. See salary compression section below.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nb" id="r_rev_note" style="display:none"></div>
+
+    <div class="nb">
+      <p><strong>Equity and stock compensation — what this means in practice</strong></p>
+      <p>Equity is a standard part of VP-level offer packages and worth understanding before you negotiate. According to Carta, the market standard is a 4-year vesting schedule with a 1-year cliff. No equity is accessible in year one. After 12 months the first portion vests. The rest follows gradually over 3 years.</p>
+      <p>Two types appear most often at the VP level. RSUs are grants of actual company stock. At public companies they have real cash value when they vest. At private companies equity typically comes as stock options — significant on paper but dependent on a future liquidity event like an acquisition or IPO to realize actual value.</p>
+      <p>Sequoia's 2025 compensation data notes that without a clear liquidity path, equity awards carry more risk at private companies. The figures shown here are estimated annual grant values — a negotiation component, not a guaranteed take-home number. Understanding the range helps you know what to ask for when an offer is in front of you.</p>
+      <em>Sources: Carta Stock Options and RSU guides. Carta 2025 PE Executive Equity Report. Sequoia Compensation Advisory 2025.</em>
+    </div>
+
+    <hr class="d"/>
+    <div id="compression_block"></div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Information you provide here is never stored or shared. This calculator runs entirely in your browser.</p>
+    <p>Built by Potentiate OS &nbsp;·&nbsp; Version 1.0 | April 2026</p>
+    <p>Data sources: Salary.com &nbsp;·&nbsp; ASCM 2025 Supply Chain Salary and Career Report &nbsp;·&nbsp; Carta 2025 PE Executive Equity Report &nbsp;·&nbsp; Sequoia Compensation Advisory benchmarks</p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var salary={
+    director:       {u100:[131000,151000,173000],h500:[154000,173000,196000],h2b:[168000,189000,213000],o2b:[178000,198000,224000]},
+    senior_director:{u100:[154000,178000,204000],h500:[178000,201000,229000],h2b:[194000,217000,243000],o2b:[206000,229000,257000]},
+    vp:             {u100:[164000,189000,223000],h500:[201000,229000,260000],h2b:[224000,253000,288000],o2b:[248000,280000,323000]},
+    svp:            {u100:[178000,206000,241000],h500:[220000,252000,288000],h2b:[245000,280000,318000],o2b:[262000,305000,353000]}
+  };
+  var nextLevel={director:'vp',senior_director:'vp',vp:'svp',svp:null};
+  var levelLabel={director:'VP',senior_director:'VP',vp:'SVP',svp:null};
+  var equity={
+    u100:{floor:0,    ceil:25000, sub:'Early-stage companies. Equity less common; estimated grant value $0 to $25,000. Source: Carta 2025.'},
+    h500:{floor:15000,ceil:60000, sub:'Growth-stage and PE-backed companies. Estimated VP grant value $15,000 to $60,000. Source: Carta PE Equity Report 2025.'},
+    h2b: {floor:30000,ceil:100000,sub:'Established private and mid-large public companies. Estimated VP equity $30,000 to $100,000 annually. Source: Salary.com, Equilar.'},
+    o2b: {floor:50000,ceil:175000,sub:'Large public and enterprise companies. Estimated VP equity $50,000 to $175,000+ annually. Source: Salary.com, Equilar.'}
+  };
+  var revNotes={
+    u100:'At companies under $100M revenue, total VP compensation including bonus typically ranges from $155,000 to $205,000. Equity is less common at this stage.',
+    h500:'At $100M to $500M companies, total VP compensation including bonus and equity typically ranges from $235,000 to $325,000.',
+    h2b: 'At $500M to $2B companies, total VP compensation including bonus and equity typically ranges from $300,000 to $420,000.',
+    o2b: 'At $2B+ companies, total VP compensation including bonus and equity typically ranges from $375,000 to $580,000+.'
+  };
+
+  function fmt(n){return '$'+Math.round(n).toLocaleString('en-US');}
+  function fmtRange(lo,hi,plus){return fmt(lo)+' — '+fmt(hi)+(plus?'+':'');}
+
+  function run(){
+    var base=parseFloat(document.getElementById('inp_base').value);
+    var bonus=parseFloat(document.getElementById('inp_bonus').value)||0;
+    var title=document.getElementById('inp_title').value;
+    var revTarget=document.getElementById('inp_rev_target').value;
+    var err=document.getElementById('err_msg');
+    var out=document.getElementById('output_block');
+
+    if(!base||base<=0||!title||!revTarget){
+      err.textContent='Please fill in your base salary, current title, and target company revenue to see your results.';
+      err.style.display='block';
+      out.classList.remove('show');
+      return;
+    }
+    err.style.display='none';
+
+    var next=nextLevel[title];
+    var label=levelLabel[title];
+
+    if(!next){
+      err.textContent='You are already at the SVP level. This calculator maps the path from Director and VP to the next level.';
+      err.style.display='block';
+      out.classList.remove('show');
+      return;
+    }
+
+    var currentTotal=base+bonus;
+    var range=salary[next][revTarget];
+    var low=range[0],mid=range[1],high=range[2];
+    var gap=Math.max(0,mid-base);
+
+    document.getElementById('r_current').textContent=fmt(currentTotal);
+    document.getElementById('r_current_sub').textContent=bonus>0?'Base '+fmt(base)+' + bonus '+fmt(bonus):'Base salary only';
+    document.getElementById('r_target_label').textContent='Target '+label+' range';
+    document.getElementById('r_low').textContent=fmt(low);
+    document.getElementById('r_mid').textContent=fmt(mid);
+    document.getElementById('r_high').textContent=fmt(high);
+
+    if(gap>0){
+      document.getElementById('r_gap').textContent=fmt(gap);
+      document.getElementById('r_gap_sub').textContent='vs '+label+' base midpoint at target company';
+      document.getElementById('r_3yr').textContent=fmt(gap*3);
+      document.getElementById('r_5yr').textContent=fmt(gap*5);
+    } else {
+      document.getElementById('r_gap').textContent='At or above midpoint';
+      document.getElementById('r_gap_sub').textContent='Your base is competitive for this level';
+      document.getElementById('r_3yr').textContent='—';
+      document.getElementById('r_5yr').textContent='—';
+    }
+
+    var bonusLo=Math.round(mid*0.20);
+    var bonusHi=Math.round(mid*0.40);
+    var eqData=equity[revTarget];
+    var eqFloor=eqData.floor;
+    var eqCeil=eqData.ceil;
+    var totalLo=low+bonusLo+eqFloor;
+    var totalHi=high+bonusHi+eqCeil;
+
+    document.getElementById('rc_base_label').textContent=label+' base salary midpoint';
+    document.getElementById('rc_base_val').textContent=fmt(mid);
+    document.getElementById('rc_bonus_val').textContent=fmtRange(bonusLo,bonusHi,false);
+    document.getElementById('rc_equity_val').textContent=eqFloor===0?'$0 — '+fmt(eqCeil):fmtRange(eqFloor,eqCeil,revTarget==='o2b');
+    document.getElementById('rc_equity_sub').textContent=eqData.sub;
+    document.getElementById('rc_total_val').textContent=fmtRange(totalLo,totalHi,revTarget==='o2b');
+
+    var revNoteEl=document.getElementById('r_rev_note');
+    if(revNotes[revTarget]){
+      revNoteEl.innerHTML='<strong>Total compensation context:</strong> '+revNotes[revTarget];
+      revNoteEl.style.display='block';
+    } else {
+      revNoteEl.style.display='none';
+    }
+
+    out.classList.add('show');
+    setTimeout(function(){
+      out.scrollIntoView({behavior:'smooth',block:'start'});
+    },100);
+
+    // Salary compression logic
+    var yrsRole = parseFloat(document.getElementById('inp_yrs_role').value) || 0;
+    var compEl = document.getElementById('compression_block');
+    var RAISE = 0.015;
+    var MARKET = 0.035;
+    var COMP_RATE = MARKET - RAISE; // 0.02
+    var THRESHOLD = 4;
+
+    // Helper: backward reconstruction - deflate current base by 1.5% per year
+    // to reconstruct what salary likely was in each prior year
+    // Then apply 2% compression gap to each reconstructed year
+    function compShortfall(currentBase, yearsTotal) {
+      var total = 0;
+      for(var y = THRESHOLD + 1; y <= yearsTotal; y++) {
+        var yearsAgo = yearsTotal - y;
+        var reconstructedBase = currentBase / Math.pow(1 + RAISE, yearsAgo);
+        total += reconstructedBase * COMP_RATE;
+      }
+      return Math.round(total);
+    }
+
+    function compAnnual(currentBase, atYear) {
+      // Current year compression is 2% of current base (no reconstruction needed for current year)
+      return Math.round(currentBase * COMP_RATE);
+    }
+
+    // Update receipt compression section
+    var rcCompSection = document.getElementById('rc_compression_section');
+
+    if(yrsRole > THRESHOLD) {
+      var annualComp = compAnnual(base, yrsRole);
+      var cumComp = compShortfall(base, yrsRole);
+      var yrsCompressed = yrsRole - THRESHOLD;
+      var combinedAnnual = gap + annualComp;
+      var combined3yr = (gap * 3) + cumComp + (annualComp * 2);
+      var combined5yr = (gap * 5) + cumComp + (annualComp * 4);
+
+      document.getElementById('rc_comp_annual').textContent = fmt(annualComp) + ' / yr';
+      document.getElementById('rc_comp_cumulative').textContent = fmt(cumComp);
+      document.getElementById('rc_comp_yrs_sub').textContent = 'Since year 4 — ' + yrsCompressed + ' year' + (yrsCompressed===1?'':'s') + ' of compression';
+      document.getElementById('rc_combined_annual').textContent = fmt(combinedAnnual);
+      document.getElementById('rc_combined_3yr').textContent = fmt(combined3yr);
+      document.getElementById('rc_combined_5yr').textContent = fmt(combined5yr);
+      rcCompSection.style.display = 'block';
+
+      // Build compression narrative at bottom
+      compEl.innerHTML =
+        '<p class="sh" style="margin-bottom:12px">Salary compression — this is already happening</p>' +
+        '<div class="nb">' +
+        '<p><strong>At ' + yrsRole + ' years in your current role, market data suggests your salary has likely fallen behind what an external hire in your position would negotiate today.</strong></p>' +
+        '<p style="margin-top:10px">The estimate above is based on a conservative 2% annual gap between market movement (estimated at 3.5% annually) and a 1.5% average annual raise. Many companies — particularly startups and private companies — provide lower increases or none at all in softer years, meaning your actual compression may be higher.</p>' +
+        '<p style="margin-top:10px">The combined cost of inaction shown in the receipt above reflects both the VP gap and the compression shortfall occurring simultaneously. Every year both numbers grow.</p>' +
+        '<p style="margin-top:10px">Providing insight on this is a structural reality of how internal compensation works. The question is what you do with it now to improve your future.</p>' +
+        '<p style="margin-top:12px;font-size:11px;color:rgba(246,245,241,0.40);">Sources: Syndio 2023 — in 83% of high-paying roles above $125,000, tenured employees earn the same or less than new hires. ADP Pay Insights — job switchers have historically earned 8 to 15% more than job stayers in the same period. Wharton professor Matthew Bidwell — external hires earn 18 to 20% more than internal promotions for equivalent roles. Payscale 2025 — average annual raises budgeted at 3.5% for 2025.</p>' +
+        '</div>';
+
+    } else if(yrsRole >= 1) {
+      // Educational forward-looking table for years 1-4
+      rcCompSection.style.display = 'none';
+
+      // Calculate forward-looking bands
+      var comp5 = compShortfall(base, 5);
+      var comp7 = compShortfall(base, 7);
+      var comp8 = compShortfall(base, 8);
+      var comp10 = compShortfall(base, 10);
+
+      compEl.innerHTML =
+        '<p class="sh" style="margin-bottom:12px">Salary compression — where you stand</p>' +
+        '<div class="nb">' +
+        '<p><strong>You are within the healthy tenure window for your role.</strong> At ' + yrsRole + ' year' + (yrsRole===1?'':'s') + ' in your current position, salary compression has not yet set in. This is the right time to understand what it is and why it matters — before it does.</p>' +
+        '<p style="margin-top:10px">Internal raises at most companies average 3 to 4% annually. The broader market for your title and experience level typically moves faster. The gap between your salary and what an external hire would negotiate for the same role tends to widen starting around year four or five. Most people don\'t notice until they\'ve already lost significant ground.</p>' +
+        '<p style="margin-top:10px">Cost of living adjustments are not legally required and are not guaranteed. Many companies — particularly startups and private companies — provide lower increases or none at all in softer years.</p>' +
+
+        '<div style="background:rgba(246,245,241,0.06);border:.5px solid rgba(246,245,241,0.15);border-radius:8px;padding:14px;margin:14px 0">' +
+        '<div style="font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(246,245,241,0.45);margin-bottom:12px">If you remain in your current role beyond year 4</div>' +
+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:.5px solid rgba(246,245,241,0.08)">' +
+        '<div><div style="font-size:13px;color:rgba(246,245,241,0.80);font-weight:500">Years 5 to 7</div>' +
+        '<div style="font-size:11px;color:rgba(246,245,241,0.40);margin-top:2px">Compression begins building</div></div>' +
+        '<div style="font-size:13px;font-weight:500;color:#e8a090;text-align:right">' + fmt(comp5) + ' — ' + fmt(comp7) + '</div>' +
+        '</div>' +
+
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:.5px solid rgba(246,245,241,0.08)">' +
+        '<div><div style="font-size:13px;color:rgba(246,245,241,0.80);font-weight:500">Years 8 to 10</div>' +
+        '<div style="font-size:11px;color:rgba(246,245,241,0.40);margin-top:2px">Compression compounds significantly</div></div>' +
+        '<div style="font-size:13px;font-weight:500;color:#e8a090;text-align:right">' + fmt(comp8) + ' — ' + fmt(comp10) + '</div>' +
+        '</div>' +
+
+        '<div style="padding:8px 0 4px">' +
+        '<div style="font-size:13px;color:rgba(246,245,241,0.80);font-weight:500">Year 10 and beyond</div>' +
+        '<div style="font-size:11px;color:rgba(246,245,241,0.40);margin-top:2px;line-height:1.5">Compression significantly erodes external negotiating leverage. Market positioning becomes increasingly difficult to recover.</div>' +
+        '</div>' +
+
+        '<div style="font-size:11px;color:rgba(246,245,241,0.35);margin-top:8px;border-top:.5px solid rgba(246,245,241,0.08);padding-top:8px">Calculated assuming 1.5% average annual salary increase. Market movement estimated at 3.5% annually (Payscale 2025). This is separate from and in addition to the VP gap shown above.</div>' +
+        '</div>' +
+
+        '<p>Understanding this now is exactly the kind of preparation that separates Directors who make VP from those who wait too long.</p>' +
+        '<p style="margin-top:12px;font-size:11px;color:rgba(246,245,241,0.40);">Sources: Syndio 2023 — in 83% of high-paying roles above $125,000, tenured employees earn the same or less than new hires. ADP Pay Insights — job switchers have historically earned 8 to 15% more than job stayers in the same period. Wharton professor Matthew Bidwell — external hires earn 18 to 20% more than internal promotions for equivalent roles.</p>' +
+        '</div>';
+
+    } else {
+      rcCompSection.style.display = 'none';
+      compEl.innerHTML = '';
+    }
+  }
+
+  document.getElementById('calc_btn').addEventListener('click',run);
+})();
+</script>
+</body>
+</html>
